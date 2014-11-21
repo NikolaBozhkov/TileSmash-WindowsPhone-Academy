@@ -10,17 +10,17 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="9*" />
+            <RowDefinition Height="4.5*" />
+            <RowDefinition Height="11*" />
         </Grid.RowDefinitions>
         
         <local:HudControl Grid.Row="0"
                           Grid.Column="0"
-                          Margin="10, 10, 10, 0"/>
+                          Margin="19, 10, 19, 0"/>
         <Border Name="GameGridBorder"
                 Grid.Row="1"
                 Grid.Column="0"
-                Margin="10"
+                Margin="10, 0"
                 VerticalAlignment="Top"
                 Padding="4.5"
                 CornerRadius="7"

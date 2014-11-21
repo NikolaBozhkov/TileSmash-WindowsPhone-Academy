@@ -22,7 +22,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AppViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HudViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GameViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
