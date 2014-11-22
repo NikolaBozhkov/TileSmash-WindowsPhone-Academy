@@ -43,5 +43,10 @@
                 return colors;
             }
         }
+
+        public static Color GetRandomColor()
+        {
+            return Colors[RandomInstance.Next(0, Colors.Length)];
+        }
     }
 }

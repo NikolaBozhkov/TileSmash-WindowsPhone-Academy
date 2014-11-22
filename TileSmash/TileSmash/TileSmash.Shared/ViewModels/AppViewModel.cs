@@ -26,15 +26,15 @@
 
         private BlockViewModel CreateBlock(int maximumBlocksOfColor)
         {
-            var randomColorIndex = Util.RandomInstance.Next(0, Util.Colors.Length);
-            while (this.GameModel.ColorBlockCounts[Util.Colors[randomColorIndex]] >= maximumBlocksOfColor)
+            var randomColor = Util.GetRandomColor();
+            while (this.GameModel.ColorBlockCounts[randomColor] >= maximumBlocksOfColor)
             {
-                randomColorIndex = Util.RandomInstance.Next(0, Util.Colors.Length);
+                randomColor = Util.GetRandomColor();
             }
 
-            var block = new BlockViewModel(Util.Colors[randomColorIndex]);
+            var block = new BlockViewModel(randomColor);
 
-            ++this.GameModel.ColorBlockCounts[Util.Colors[randomColorIndex]];
+            ++this.GameModel.ColorBlockCounts[randomColor];
             return block;
         }
 

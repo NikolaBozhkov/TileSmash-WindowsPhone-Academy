@@ -2,24 +2,26 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Text;
-    using System.Linq;
 
+    using Windows.UI;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Media;
 
     using TileSmash.Common;
-    using Windows.UI;
+    using System.Threading;
+    using System.Diagnostics;
 
     public class GameViewModel: ViewModelBase
     {
         public const int MaxStonesInField = 10;
-        public const int SecondsToDestroy = 5;
+        public const int SecondsToDestroy = 7;
         public const int StreakBonusPoints = 5;
 
         private int score;
         private int best;
         private TimeSpan timeLeft;
         private int stones;
+        private SolidColorBrush currentColor;
 
         public GameViewModel(int best, SolidColorBrush currentColor)
         {
@@ -34,6 +36,8 @@
             {
                 this.ColorBlockCounts[color] = 0;
             }
+
+            this.RunTimer();
         }
 
         public int MaxStones
@@ -96,7 +100,7 @@
             set
             {
                 this.timeLeft = value;
-                this.NotifyPropertyChanged("TimeLeft");
+                this.NotifyPropertyChanged("TimeLeftFormatted");
             }
         }
 
@@ -108,17 +112,56 @@
             }
         }
 
-        public SolidColorBrush CurrentColor { get; set; }
+        public SolidColorBrush CurrentColor
+        {
+            get
+            {
+                return this.currentColor;
+            }
+
+            set
+            {
+                this.currentColor = value;
+                this.NotifyPropertyChanged("CurrentColor");
+            }
+        }
 
         public IDictionary<Color, int> ColorBlockCounts { get; private set; }
 
         public IList<BlockViewModel> Blocks { get; private set; }
 
+        private void RunTimer()
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Tick += (sender, e) =>
+            {
+                var currentLeftMillisec = -1 * (sw.ElapsedMilliseconds - (SecondsToDestroy * 1000));
+                this.TimeLeft = TimeSpan.FromMilliseconds(currentLeftMillisec);
+                if (this.TimeLeft.TotalMilliseconds <= 0)
+                {
+                    sw.Restart();
+
+                    var randomColor = Util.GetRandomColor();
+                    while (this.ColorBlockCounts[randomColor] <= 0)
+                    {
+                        randomColor = Util.GetRandomColor();
+                    }
+
+                    this.CurrentColor = new SolidColorBrush(randomColor);
+                }
+            };
+
+            timer.Start();
+        }
+
         public void HandleBlockDestroyed(object sender, EventArgs e)
         {
             var block = (BlockViewModel)sender;
             var blockBrush = (SolidColorBrush)block.UIElement.Background;
-            block.UIElement.Background = new SolidColorBrush(Util.Colors[0]);
             --this.ColorBlockCounts[blockBrush.Color];
 
             if (this.CurrentColor.Color == blockBrush.Color)
