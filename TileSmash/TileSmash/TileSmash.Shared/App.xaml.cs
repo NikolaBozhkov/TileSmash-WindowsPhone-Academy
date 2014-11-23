@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -15,6 +17,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+
+using TileSmash.ViewModels;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -95,14 +99,14 @@ namespace TileSmash
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(GamePage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
             }
 
             // Ensure the current window is active
-            Window.Current.Activate();
+            Window.Current.Activate(); 
         }
 
 #if WINDOWS_PHONE_APP
@@ -130,7 +134,7 @@ namespace TileSmash
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
-            // TODO: Save application state and stop any background activity
+            ApplicationData.Current.LocalSettings.Values[AppViewModel.BestKey] = GameViewModel.best;
             deferral.Complete();
         }
     }

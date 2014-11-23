@@ -7,9 +7,24 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="White" />
     </Style>
+    <Style TargetType="HyperlinkButton" x:Key="HyperlinkMainFontStyle">
+        <Setter Property="FontFamily" Value="Comic Sans MS" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
     <Style TargetType="TextBlock" x:Key="GamePageMainFont" BasedOn="{StaticResource MainFontStyle}">
         <Setter Property="FontSize" Value="25" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
+    
     <SolidColorBrush x:Key="TitleBackgroundBlue" Color="#0B9192" />
+    
+    <Style TargetType="Border" x:Key="GameOverPageBorderStyle">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Background" Value="{StaticResource TitleBackgroundBlue}" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Padding" Value="15" />
+    </Style>
 </ResourceDictionary>

@@ -5,6 +5,7 @@
     using System.Text;
 
     using Windows.Foundation;
+    using Windows.Storage;
     using Windows.UI;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -16,10 +17,23 @@
 
     public class AppViewModel : ViewModelBase
     {
+        public const string BestKey = "Best";
+
         public AppViewModel()
         {
-            var randomColorBrush = new SolidColorBrush(Util.Colors[Util.RandomInstance.Next(0, Util.Colors.Length)]);
-            this.GameModel = new GameViewModel(0, randomColorBrush);
+            var randomColorBrush = new SolidColorBrush(Util.GetRandomColor());
+
+            int best;
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(BestKey))
+            {
+                best = (int)(ApplicationData.Current.LocalSettings.Values[BestKey]);
+            }
+            else
+            {
+                best = 0;            
+            }
+
+            this.GameModel = new GameViewModel(best, randomColorBrush);
         }
 
         public GameViewModel GameModel { get; set; }
@@ -54,10 +68,13 @@
 
                     this.GameModel.Blocks.Add(block);
                     block.Destroyed += this.GameModel.HandleBlockDestroyed;
+                    block.DestroyPowerUsed += this.GameModel.HandleDestroyPowerUsed;
 
                     gameGrid.Children.Add(block.UIElement);
                 }
             }
+
+            this.GameModel.ToggleBlocksTap(false);
         }
     }
 }

@@ -22,15 +22,11 @@
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class GamePage : Page
     {
-        public MainPage()
+        public GamePage()
         {
             this.InitializeComponent();
-
-            var appViewModel = new AppViewModel();
-            appViewModel.InitializeGameGrid(this.GameGrid);
-            this.DataContext = appViewModel;
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
@@ -42,13 +38,30 @@
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // TODO: Prepare page for display here.
+            
+            this.IsTapEnabled = true;
+            this.Tapped += this.OnPageTapped;
+            this.TapToStartTextBlock.Visibility = Visibility.Visible;
 
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+            foreach (var child in this.GameGrid.Children.ToList())
+            {
+                if (child != this.TapToStartTextBlock)
+                {
+                    this.GameGrid.Children.Remove(child);
+                }
+            }
+
+            var appViewModel = new AppViewModel();
+            appViewModel.InitializeGameGrid(this.GameGrid);
+            this.DataContext = appViewModel;
+        }
+
+        private void OnPageTapped(object sender, TappedRoutedEventArgs e)
+        {
+            this.IsTapEnabled = false;
+            this.Tapped -= OnPageTapped;
+            ((AppViewModel)this.DataContext).GameModel.StartGame();
+            this.TapToStartTextBlock.Visibility = Visibility.Collapsed;
         }
     }
 }
