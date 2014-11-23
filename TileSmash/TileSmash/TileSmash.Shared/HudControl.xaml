@@ -38,7 +38,7 @@
                    HorizontalAlignment="Left"
                    Margin="0, 10, 0, 0"
                    Style="{StaticResource GamePageMainFont}">
-            <Run Text="Score" />
+            <Run Text="SCORE" />
             <Run Text="{Binding GameModel.Score}" />
         </TextBlock>
 
@@ -47,7 +47,7 @@
                    HorizontalAlignment="Left"
                    VerticalAlignment="Bottom"
                    Style="{StaticResource GamePageMainFont}">
-            <Run Text="Best" />
+            <Run Text="BEST" />
             <Run Text="{Binding GameModel.Best}" />
         </TextBlock>
 
@@ -64,15 +64,28 @@
                        Style="{StaticResource GamePageMainFont}" />
         </Border>
 
-        <TextBlock Grid.Row="3"
-                   Grid.Column="0"
-                   Grid.ColumnSpan="3"
-                   VerticalAlignment="Center"
-                   Style="{StaticResource GamePageMainFont}">
-            <Run Text="Stones " />
-            <Run Text="{Binding GameModel.Stones}" />
-            <Run Text="/" />
-            <Run Text="{Binding GameModel.MaxStones}" />
-        </TextBlock>
+        <Grid Grid.Row="3"
+              Grid.Column="0"
+              Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.4*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="0"
+                    Name="StoneBlock"
+                    HorizontalAlignment="Right"
+                    Margin="5, 0"
+                    Background="{StaticResource StoneBlockBrush}"
+                    Width="{Binding ElementName=StoneBlock, Path=ActualHeight}" />
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Style="{StaticResource GamePageMainFont}">
+                <Run Text="{Binding GameModel.Stones}" />
+                <Run Text="/" />
+                <Run Text="{Binding GameModel.MaxStones}" />
+            </TextBlock>
+        </Grid>
     </Grid>
 </UserControl>

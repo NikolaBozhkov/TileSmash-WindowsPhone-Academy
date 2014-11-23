@@ -26,7 +26,11 @@
 
         private int score;
         private int streakCount = 0;
+
         private TimeSpan timeLeft;
+        private Stopwatch stopWatch;
+        private DispatcherTimer timer;
+
         private int stones;
         private SolidColorBrush currentColor;
 
@@ -37,7 +41,11 @@
             this.CurrentColor = currentColor;
             this.Score = 0;
             this.Stones = 0;
+
             this.TimeLeft = TimeSpan.FromSeconds(SecondsToDestroy);
+            this.stopWatch = new Stopwatch();
+            this.timer = new DispatcherTimer();
+
             this.Blocks = new List<BlockViewModel>();
             this.ColorBlockCounts = new Dictionary<Color, int>();
             foreach (var color in Util.Colors)
@@ -140,46 +148,50 @@
         public void StartGame()
         {
             this.ToggleBlocksTap(true);
-            var sw = new Stopwatch();
-            sw.Start();
+            this.stopWatch.Start();
 
-            var timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(10);
-            timer.Tick += (sender, e) =>
+            this.timer = new DispatcherTimer();
+            this.timer.Interval = TimeSpan.FromMilliseconds(10);
+            this.timer.Tick += (sender, e) =>
             {
-                var currentLeftMillisec = -1 * (sw.ElapsedMilliseconds - (SecondsToDestroy * 1000));
+                var currentLeftMillisec = -1 * (this.stopWatch.ElapsedMilliseconds - (SecondsToDestroy * 1000));
                 this.TimeLeft = TimeSpan.FromMilliseconds(currentLeftMillisec);
                 if (this.TimeLeft.TotalMilliseconds <= 0)
                 {
-                    var oldStones = this.Stones;
-                    this.TurnFailedBlocksToStones();
-
-                    if (oldStones != this.Stones)
-                    {
-                        this.streakCount = 0;
-                    }
-                    else
-                    {
-                        this.Score += StreakBonusPoints * this.streakCount;
-                        ++this.streakCount;
-                    }
-
-                    if (this.Stones == MaxStonesInField)
-                    {
-                        this.EndGame();
-                        sw.Stop();
-                        timer.Stop();
-                        this.TimeLeft = TimeSpan.FromSeconds(0);
-                        return;
-                    }
-
-                    sw.Restart();
-                    this.ChangeCurrentColor();
-                    ++cyclesSinceLastDestroyPowerUsed;
+                    this.OnTimeLeftIsZero();
                 }
             };
 
-            timer.Start();
+            this.timer.Start();
+        }
+
+        private void OnTimeLeftIsZero()
+        {
+            var oldStones = this.Stones;
+            this.TurnFailedBlocksToStones();
+
+            if (oldStones != this.Stones)
+            {
+                this.streakCount = 0;
+            }
+            else
+            {
+                this.Score += StreakBonusPoints * this.streakCount;
+                ++this.streakCount;
+            }
+
+            if (this.Stones == MaxStonesInField)
+            {
+                this.EndGame();
+                this.stopWatch.Stop();
+                this.timer.Stop();
+                this.TimeLeft = TimeSpan.FromSeconds(0);
+                return;
+            }
+
+            this.stopWatch.Restart();
+            this.ChangeCurrentColor();
+            ++cyclesSinceLastDestroyPowerUsed;
         }
 
         private void EndGame()
@@ -243,8 +255,13 @@
                 this.Score += BlockViewModel.Points; 
             }
 
+            var oldColor = block.Color;
             block.ResetBlockUIElement();
             ++this.ColorBlockCounts[block.Color];
+            if (this.ColorBlockCounts[oldColor] == 0)
+            {
+                this.OnTimeLeftIsZero();
+            }
         }
 
         public void HandleDestroyPowerUsed(object sender, EventArgs e)
