@@ -103,15 +103,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="packages.config" />
     <None Include="TileSmash.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +117,20 @@
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.6\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Parse">
+      <HintPath>C:\Users\Nikola\Desktop\Windows-Universal-master\ParsePhoneStarterProject\lib\Parse.dll</HintPath>
+    </Reference>
+    <Reference Include="Parse.Phone">
+      <HintPath>C:\Users\Nikola\Desktop\Windows-Universal-master\ParsePhoneStarterProject\lib\Parse.Phone.dll</HintPath>
+    </Reference>
+    <Reference Include="Parse.WinRT">
+      <HintPath>C:\Users\Nikola\Desktop\Windows-Universal-master\Parse.WinRT.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

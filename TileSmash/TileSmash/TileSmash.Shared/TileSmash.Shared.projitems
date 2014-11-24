@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ParseClasses\PlayerScore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\AppViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BlockViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GameOverViewModel.cs" />

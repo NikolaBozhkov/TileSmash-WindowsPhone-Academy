@@ -19,6 +19,7 @@
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
         <m2:InitialRotationPreference>
           <m2:Rotation Preference="portrait" />
+          <m2:Rotation Preference="portraitFlipped" />
         </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>

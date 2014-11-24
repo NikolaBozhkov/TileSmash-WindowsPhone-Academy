@@ -17,8 +17,12 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.Graphics.Display;
+
+using Parse;
 
 using TileSmash.ViewModels;
+using TileSmash.ParseClasses;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -39,8 +43,13 @@ namespace TileSmash
         /// </summary>
         public App()
         {
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped;
+
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+            ParseObject.RegisterSubclass<PlayerScore>();
+            ParseClient.Initialize("dgzqPLMBFDVa6pkQ8WtPOrPtJMs9fFzGktAKrjmL", "oeyCKlHVjLAwHUFVzL5n98O4wAFkpAAvxtE1l0Jw");
         }
 
         /// <summary>
@@ -49,8 +58,11 @@ namespace TileSmash
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
+            var testObject = new ParseObject("TestObject");
+            testObject["foo"] = "bar";
+            await testObject.SaveAsync();
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
